@@ -1,0 +1,22 @@
+.es(index= my-data-stream,
+    timefield='@timestamp',
+    metric='avg:Humidity_DHT')
+    .label('Humidity %')
+    .title('Arduino Sensor Data')
+    .lines(fill=1,width=2,show=true)
+    .color(#C8E2EB),
+
+.es(index= my-data-stream,
+    timefield='@timestamp',
+    metric='avg:Temperature_DHT')
+    .label('Temperature ℃')
+    .lines(fill=1,width=2,show=true)
+    .color(#ff00ff),
+
+.es(index= my-data-stream,
+    timefield='@timestamp',
+    metric='avg:Moisture').subtract(term=1024)
+    .multiply(multiplier=-0.125)
+    .label('Soil Moisture Level')
+    .lines(fill=1,width=2,show=true)
+    .color(#8DA3CA)
