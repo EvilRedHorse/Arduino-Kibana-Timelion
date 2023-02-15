@@ -65,7 +65,7 @@ crontab -e
 Add this line to your crontab; a report will be run every 25 minutes.
 
 ```
-*/25 * * * * sudo -u $USER /usr/bin/bash -c /home/$USER/Public/sendSerial.sh
+*/25 * * * * sudo -u $USER /usr/bin/bash -c /home/$USER/Public/Arduino-Kibana-Timelion/sendSerial.sh
 
 ```
 
