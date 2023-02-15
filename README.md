@@ -14,23 +14,54 @@ Secured Arduino Sensor Data to Elasticsearch, Kibana &amp; Timelion.
 
 6.  i)   Arduino - 1024-bit password
    
-    ii)  Linux OS - PAM
+  ii)  Linux OS - PAM
 
-    iii) Elasticsearch & Kibana - username:base64password
+  iii) Elasticsearch & Kibana - username:base64password
 
-#### **DNF/RPM Requirements:**
+DNF/RPM Requirements:
 
 ```
 sudo dnf -y install screen socat curl crond java-11-openjdk snapd
 sudo ln -s /var/lib/snapd/snap /snap
 ```
 
-#### **Install Arduino IDE & CLI:**
+#### *Install Arduino IDE & CLI:*
 ```
 sudo usermod -a -G dialout $USER
 sudo snap install arduino
 sudo snap install arduino-cli
 ```
 
-#### **Install Elasticsearch & Kibana:**
+#### *Install Elasticsearch & Kibana:*
 https://www.elastic.co/guide/en/elasticsearch/reference/current/rpm.html
+
+#### Certs
+Copy your existing Elasticsearch certs.
+
+```
+sudo cp /etc/elasticsearch/certs/http_ca.crt  ~/.certs/http_ca.crt
+```
+
+#### Mem
+To avoid disk writes, allow user access to `/dev/shm` 
+
+```
+# allow read/write on dev/shm
+sudo chmod u+rw /dev/shm
+```
+
+#### Get repo & add Crontab
+Add bash script to crontab send data from Arduino to Elasticsearch at regular intervals.
+
+```
+cd Public
+git clone https://github.com/EvilRedHorse/Arduino-Kibana-Timelion
+crontab -e
+```
+
+Add this line to your crontab; a report will be run every 25 minutes.
+
+```
+*/25 * * * * sudo -u $USER /usr/bin/bash -c /home/$USER/Public/sendSerial.sh
+
+```
