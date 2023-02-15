@@ -18,22 +18,25 @@ Secured Arduino Sensor Data to Elasticsearch, Kibana &amp; Timelion.
 
   iii) Elasticsearch & Kibana - username:base64password
 
-DNF/RPM Requirements:
+#### DNF/RPM Requirements:
 
 ```
 sudo dnf -y install screen socat curl crond java-11-openjdk snapd
 sudo ln -s /var/lib/snapd/snap /snap
 ```
 
-#### *Install Arduino IDE & CLI:*
+#### Install Arduino IDE & CLI:
+
 ```
 sudo usermod -a -G dialout $USER
 sudo snap install arduino
 sudo snap install arduino-cli
 ```
 
-#### *Install Elasticsearch & Kibana:*
-https://www.elastic.co/guide/en/elasticsearch/reference/current/rpm.html
+#### Install Elasticsearch & Kibana:
+
+Elasticsearch Information: [Elasticsearch Reference](https://www.elastic.co/guide/en/elasticsearch/reference/current/rpm.html "Elasticsearch Reference").
+
 
 #### Certs
 Copy your existing Elasticsearch certs.
@@ -65,3 +68,14 @@ Add this line to your crontab; a report will be run every 25 minutes.
 */25 * * * * sudo -u $USER /usr/bin/bash -c /home/$USER/Public/sendSerial.sh
 
 ```
+
+#### Timelion
+Our soil moisture sensor data ranges from 0-1023 and it is reversed. With a time lion expression we can bypass the Arduino map() function while normalising the data.
+
+These are not full timelion expressions; this is to show us inverting the graph data, scaling the data down by 8x and normalising by subtracting our available range.
+
+```
+.subtract(term=1024)
+.multiply(multiplier=-0.125)
+```
+Timelion Information:  [Kibana Timelion Functions](https://github.com/coralogix/kibana-timelion-functions/blob/master/README.md "Kibana Timelion Functions").
