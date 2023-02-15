@@ -14,9 +14,9 @@ Secured Arduino Sensor Data to Elasticsearch, Kibana &amp; Timelion.
 
 6.  i)   Arduino - 1024-bit password
    
-  ii)  Linux OS - PAM
+    ii)  Linux OS - PAM
 
-  iii) Elasticsearch & Kibana - username:base64password
+    iii) Elasticsearch & Kibana - username:base64password
 
 #### DNF/RPM Requirements:
 
