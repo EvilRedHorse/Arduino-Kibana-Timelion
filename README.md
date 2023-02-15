@@ -79,3 +79,6 @@ These are not full timelion expressions; this is to show us inverting the graph 
 .multiply(multiplier=-0.125)
 ```
 Timelion Information:  [Kibana Timelion Functions](https://github.com/coralogix/kibana-timelion-functions/blob/master/README.md "Kibana Timelion Functions").
+
+![image](https://user-images.githubusercontent.com/39168275/218949603-910caa66-c3db-4f64-b729-4585338ae1ce.png)
+
