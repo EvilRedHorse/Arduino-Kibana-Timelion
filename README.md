@@ -80,5 +80,6 @@ These are not full timelion expressions; this is to show us inverting the graph 
 ```
 Timelion Information:  [Kibana Timelion Functions](https://github.com/coralogix/kibana-timelion-functions/blob/master/README.md "Kibana Timelion Functions").
 
-![image](https://user-images.githubusercontent.com/39168275/218949603-910caa66-c3db-4f64-b729-4585338ae1ce.png)
+![image](https://user-images.githubusercontent.com/39168275/219266493-70ae370c-de6d-40b1-b53e-b8141ab7ac01.png)
+
 
