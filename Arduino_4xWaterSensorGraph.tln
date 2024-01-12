@@ -1,0 +1,82 @@
+.es(index= my-data-stream,
+    timefield='@timestamp',
+    metric='avg:Humidity_DHT_A50285BI')
+    .fit(carry) 
+    .label('Humidity %')
+    .title('Arduino Sensor Data A50285BI')
+    .yaxis(max=100)
+    .legend(columns=4, position=sw)
+    .lines(stack=0,fill=3,width=1,show=true)
+    .color(#C8E2EB),
+
+.es(index= my-data-stream,
+    timefield='@timestamp',
+    metric='avg:Temperature_DHT_A50285BI')
+    .fit(carry)
+    .label('Temperature ℃')
+    .lines(stack=0,fill=3,width=1,show=true)
+    .color(#ff00ff),
+
+.es(index= my-data-stream,
+    timefield='@timestamp',
+    metric='avg:Moisture_Sensor_1_A50285BI').subtract(term=1024)
+    .fit(carry) 
+    .multiply(multiplier=-0.125)
+    .label('Soil Moisture Level - Area 1')
+    .lines(fill=0,width=1,show=true)
+    .color(#9FC9FF),
+
+.es(index= my-data-stream,
+    timefield='@timestamp',
+    metric='avg:Moisture_Sensor_2_A50285BI').subtract(term=1024)
+    .fit(carry) 
+    .multiply(multiplier=-0.125)
+    .label('Soil Moisture Level - Area 2')
+    .lines(fill=0,width=1,show=true)
+    .color(#FF9FF9),
+
+.es(index= my-data-stream,
+    timefield='@timestamp',
+    metric='avg:Moisture_Sensor_3_A50285BI').subtract(term=1024)
+    .fit(carry) 
+    .multiply(multiplier=-0.125)
+    .label('Soil Moisture Level - Area 3')
+    .lines(fill=0,width=1,show=true)
+    .color(#FFD59F),
+
+.es(index= my-data-stream,
+    timefield='@timestamp',
+    metric='avg:Moisture_Sensor_4_A50285BI').subtract(term=1024)
+    .fit(carry) 
+    .multiply(multiplier=-0.125)
+    .label('Soil Moisture Level - Area 4')
+    .lines(fill=0,width=1,show=true)
+    .color(#468A4F),
+
+.es(index= my-data-stream,
+    timefield='@timestamp',
+    metric='avg:Wet_A50285BI')
+    .fit(carry)
+    .label('Wet Soil Moisture Level').subtract(term=1024)
+    .multiply(multiplier=-0.125)
+    .lines(steps=0,stack=0,fill=0,width=4,show=true)
+    .color(#2B65EC)
+    .max(value=100),
+
+.es(index= my-data-stream,
+    timefield='@timestamp',
+    metric='avg:Optimum_A50285BI')
+    .fit(carry)
+    .label('Optimum Soil Moisture Level').subtract(term=1024)
+    .multiply(multiplier=-0.125)
+    .lines(stack=0,fill=0,width=4,show=true)
+    .color(#228B22),
+
+.es(index= my-data-stream,
+    timefield='@timestamp',
+    metric='max:Dry_A50285BI')
+    .fit(carry)
+    .label('Dry Soil Moisture Level').subtract(term=1024)
+    .multiply(multiplier=-0.125)
+    .lines(steps=0,stack=0,fill=1,width=4,show=true)
+    .color(#D2042D)
