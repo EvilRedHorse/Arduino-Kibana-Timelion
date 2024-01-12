@@ -21,7 +21,7 @@ Secured Arduino Sensor Data to Elasticsearch, Kibana &amp; Timelion.
 #### DNF/RPM Requirements:
 
 ```
-sudo dnf -y install screen socat curl crond java-11-openjdk snapd
+sudo dnf -y install screen socat curl crontabs java-11-openjdk snapd
 sudo ln -s /var/lib/snapd/snap /snap
 ```
 
