@@ -206,24 +206,21 @@ void loop() {
     }
     // Red LED - indicate dry soil and start irrigation on Pump 1
     if (sensorValue1>limitWarn) {
-        //pumpxMOSFETPin=pump1MOSFETPin;
         irrigationcycle(pump1MOSFETPin);
     }
     //  dry soil starts irrigation on Pump 2
     if (sensorValue2>limitWarn) {
-        //pumpxMOSFETPin=pump2MOSFETPin;
         irrigationcycle(pump2MOSFETPin);
     }
     
     if (sensorValue3>limitWarn) {
-        //pumpxMOSFETPin=pump3MOSFETPin;
         irrigationcycle(pump3MOSFETPin);
     }
     
     if (sensorValue4>limitWarn) {
-        //pumpxMOSFETPin=pump4MOSFETPin;
         irrigationcycle(pump4MOSFETPin);
     }
+    
     ////// Safety Power-down <- begins //////
     // Make sure to power down the soil moisture sensor. 
     digitalWrite(sensorPowerPin, LOW);
@@ -306,15 +303,6 @@ void irrigationcycle(unsigned int pumpxMOSFETPin) {
     OCR2B = 140;
     responsivedelay(wateringPeriod/2);
 
-
-    //responsivedelay(wateringPeriod/1000);
-//    OCR2B = 9;
-    //responsivedelay(wateringPeriod/1000);
-//    OCR2B = 100;
-//    responsivedelay(wateringPeriod/60);
-//    OCR2B = 50
-    //responsivedelay(wateringPeriod/10000);
-
     // bring low pumpxMOSFETPin, (turn off relay)
     digitalWrite(pumpxMOSFETPin, HIGH);
 
@@ -367,19 +355,7 @@ void sensorReport() {
 
     String neg = "-";
     // eg. 2016-12-01T19:06:50.000-05:00
-    String rfc3339 = roundYear + neg + roundMonth + neg + roundDay + "T" + roundHour + ":" + roundMinute + ":" + roundSecond + ".000-05:00";   
-    /*
-    JSONVar timeArray;
-    timeArray["Hour"] = roundHour;
-    timeArray["Minute"] = roundMinute;
-    timeArray["Second"] = roundSecond;
-    timeArray["DayofWeek"] = daysOfTheWeek[roundtime.dayOfTheWeek()];
-    timeArray["Month"] = roundMonth;
-    timeArray["Day"] = roundDay;
-    timeArray["Year"] = roundYear;
-    timeArray["UNIX"] = unixTime;
-    timeArray["@timestamp"] = rfc3339;
-    */
+    String rfc3339 = roundYear + neg + roundMonth + neg + roundDay + "T" + roundHour + ":" + roundMinute + ":" + roundSecond + ".000-05:00";
 
     // get current alarms for the alarm arrays
     ////// the stored alarm1 value + mode //////
@@ -427,7 +403,7 @@ void sensorReport() {
     // add JSON reports to JSON mainArray
     JSONVar mainArray;
     mainArray["@timestamp"] = rfc3339;
-    mainArray["Temperature_RTC_"+SerialNumber] = (unsigned long) rtc.getTemperature();
+    mainArray["Temperature_RTC_"+SerialNumber] = rtc.getTemperature();
     mainArray["Temperature_DHT_"+SerialNumber] = dht.readTemperature();  // Read temperature as Celsius (the default)
     mainArray["Humidity_DHT_"+SerialNumber] = dht.readHumidity();
     mainArray["Moisture_Sensor_1_"+SerialNumber] = sensorValue1;
@@ -442,11 +418,6 @@ void sensorReport() {
     mainArray["Alarm1_"+SerialNumber] = alarm1Array;
     mainArray["Alarm2_"+SerialNumber] = alarm2Array;
 
-    //mainArray["Time"] = timeArray;
-    //mainArray["Alarm"] = alarmArray;
-    //mainArray["Climate"] = climateArray;
-    //mainArray["Soil"] = soilArray;
-    
     Serial.print(mainArray);
     Serial.println();
 ////// End of JSON output //////
@@ -499,14 +470,7 @@ void JSONresponder(String stringJSON){
          String closeJSON = "\"}";
          String formedJSON = openJSON+value+closeJSON;
          Serial.print(formedJSON);
-        //
-        //Serial.print("{\"nullCommand\": \"");
-        //Serial.flush();
-        //Serial.print(stringJSON);
-        //Serial.flush();
-        //Serial.print("\"}");
-        //Serial.flush();
-        return;    
+         return;    
     }
     // will execute at ms intervals
     else {
@@ -519,10 +483,10 @@ void responsivedelay(unsigned long timeoutPeriod) {
     DateTime timeoutPeriodEndDate = rtc.now();
     unsigned long timeoutPeriodSeconds = timeoutPeriod / 1000;
     volatile unsigned long timeoutPeriodEnd = timeoutPeriodEndDate.unixtime() + timeoutPeriodSeconds;
-    //Serial.print(timeoutPeriodEnd);
+    
     // change unsigned long timeoutPeriod timePeriod from the usual ms to seconds for calculations
     timeoutPeriodDecay = timeoutPeriodSeconds;
-    //Serial.print(timeoutPeriodDecay);
+    
 
     while (timeoutPeriodDecay > 0) {
         // decay timeout period
@@ -531,11 +495,10 @@ void responsivedelay(unsigned long timeoutPeriod) {
         //Serial.print(timeoutPeriodDecay);
         Serial.setTimeout(timeoutPeriodDecay);
         String serialString = Serial.readString();
-        // initial response to input is to send back the same data as a confirmation <- should be packed in JSON format
-        //Serial.print(serialString);
-        //////
-        ///      This is our opportunity to ingest data and perform actions
-        ///          - this could include setting timeout to 0 to start loop or trigger irrigation
+        /*  initial response to input is to send back the same data as a confirmation <- should be packed in JSON format
+            - This is our opportunity to ingest data and perform actions,
+              which could include setting timeout to 0 to start loop or trigger irrigation
+        */
         JSONresponder(serialString);
         //////  
        }
