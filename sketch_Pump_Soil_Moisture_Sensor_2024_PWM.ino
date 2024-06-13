@@ -138,7 +138,7 @@ void setup() {
 
     // Start serial at 38400 baud rate
     // bash: `screen /dev/ttyACM0 38400`
-    Serial.begin(9600, SERIAL_8N1);
+    Serial.begin(2400, SERIAL_8N1);
 
     #ifndef ESP8266
         while (!Serial); // wait for serial port to connect. Needed for native USB
