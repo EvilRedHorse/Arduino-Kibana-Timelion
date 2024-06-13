@@ -6,37 +6,42 @@
 # sudo chmod u+rw /dev/shm
 
 # logfile timestamp
-TIME=$(date +%s%N)
+readonly TIME=$(date +%s%N)
 # logfile to use on /dev/shm
 LOGFILE=/dev/shm/report$TIME.json
 
-# TTY connection/session info 
+# TTY connection/session info
 TTY=/dev/ttyACM0
 BAUD=2400
-TTY_SESSION_SEC=60
-LOGFILE=/dev/shm/report.json
+TTY_SESSION_SEC=65
+
 # Arduino password
-ARDUINO_PASS=
+ARDUINO_PASS=""
 # Elasticsearch password
-ELASTIC_PASS=
+ELASTIC_PASS=""
 # Elasticsearch Host, Port & Cert directory.
 ELASTIC_HOST=127.0.0.1
 ELASTIC_PORT=9200
 CERT_DIR=~/.certs/http_ca.crt
 
+counter=0
+
 tty () {
-exec 4<$TTY 5>$TTY
-stty -F $TTY $BAUD -echo
-echo "{\"pass\": \"$ARDUINO_PASS\"}" > $TTY >&5 &
-read -t $TTY_SESSION_SEC -e REPLY <&4
-echo "$REPLY" > $LOGFILE
+    exec 4<$TTY 5>$TTY
+    stty -F $TTY $BAUD -echo
+    sleep 1
+    if [[ $counter -lt 1 ]]; then
+        echo "{\"pass\": \"$ARDUINO_PASS\"}" > $TTY >&5 &
+    fi
 }
 
-while [[ -z "${REPLY}" ]]; do
+while [[ -z "${REPLY}" ]] && [[ $counter -lt 2 ]]; do
     tty
-    sleep 3
-done
+    read -t $TTY_SESSION_SEC -e REPLY <&4
+    let "counter++"
+    done
 
+echo "$REPLY" > $LOGFILE
 # show logfile
 cat $LOGFILE
 
